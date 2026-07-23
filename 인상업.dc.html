@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8fd3ff"/><rect y="62" width="100" height="38" fill="#7dc242"/><g font-family="sans-serif" font-weight="900" text-anchor="middle"><text x="50" y="42" font-size="30" fill="#4ba01f" stroke="#fff" stroke-width="1.5">인상</text><text x="50" y="72" font-size="22" fill="#f5a300" stroke="#fff" stroke-width="1">업!</text></g></svg></template>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#e9e4d8;font-family:'Jua',sans-serif;}
+  a{color:#3f7a1f;} a:hover{color:#2f5f14;}
+  @keyframes iu-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes iu-pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.06);opacity:1}}
+  @keyframes iu-ring{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+  @keyframes iu-scan{0%{top:6%}100%{top:88%}}
+  @keyframes iu-pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+  @keyframes iu-float{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(6deg)}100%{transform:translateY(0) rotate(0)}}
+  @keyframes iu-count{0%{transform:scale(1.8);opacity:0}30%{opacity:1}100%{transform:scale(.6);opacity:0}}
+  ::selection{background:#ffe08a;}
+</style>
+</helmet>
+
+<div style="height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box;">
+  <div ref="{{ setScaler }}" style="width:400px;height:860px;background:#1c1c22;border-radius:52px;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.35);flex:0 0 auto;transform-origin:center center;">
+    <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#bfe9ff;">
+      <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:28px;background:#1c1c22;border-radius:16px;z-index:60;"></div>
+
+      <!-- SCREEN 1 : START -->
+      <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;inset:0;">
+        <img src="assets/start2.png" alt="인상 업!" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+        <button onClick="{{ start }}" style="position:absolute;left:8%;right:8%;bottom:6%;display:flex;align-items:center;justify-content:center;gap:12px;padding:20px;background:linear-gradient(180deg,#ffd94a,#f7b500);border:5px solid #fff;border-radius:22px;box-shadow:0 7px 0 #d18f00,0 12px 20px rgba(180,120,0,.35);color:#fff;font-family:'Jua';font-size:30px;text-shadow:2px 2px 0 #e29400;cursor:pointer;animation:iu-bob 2.2s ease-in-out infinite;" style-active="transform:translateY(5px);box-shadow:0 2px 0 #d18f00,0 5px 10px rgba(180,120,0,.35);">호감상 되기 GO ▶</button>
+      </div>
+      </sc-if>
+
+      <!-- SCREEN 2 : MISSION -->
+      <sc-if value="{{ isMission }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;">
+        <img src="assets/mission.png" alt="오늘의 표정 미션" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+        <button onClick="{{ home }}" style="position:absolute;left:6%;top:5.5%;width:11%;height:5.5%;background:transparent;border:none;cursor:pointer;padding:0;" aria-label="뒤로"></button>
+        <button onClick="{{ goPlay }}" style="position:absolute;left:11%;right:11%;bottom:15.5%;height:7.5%;background:transparent;border:none;cursor:pointer;padding:0;" aria-label="표정 훈련 시작"></button>
+      </div>
+      </sc-if>
+
+      <!-- SCREEN 3 : PLAY -->
+      <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background:url(assets/play_bg.png) center/100% 100% no-repeat;">
+        <div style="position:absolute;left:25%;right:25%;top:20.5%;height:16.5%;border-radius:14px;overflow:hidden;">
+          <sc-if value="{{ camActive }}" hint-placeholder-val="{{ false }}">
+            <video autoplay muted playsinline ref="{{ setVideo }}" style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1);"></video>
+          </sc-if>
+          <sc-if value="{{ camError }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <div style="font-size:72px;animation:iu-bob 2.4s ease-in-out infinite;">😄</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ holding }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#7fff8a,transparent);animation:iu-scan 1.4s linear infinite;box-shadow:0 0 10px #7fff8a;"></div>
+          </sc-if>
+          <sc-if value="{{ countingDown }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.28);">
+              <div style="font-family:'Press Start 2P';font-size:46px;color:#ffd23f;text-shadow:3px 3px 0 #b06a00;animation:iu-count 1s ease-out infinite;">{{ count }}</div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="position:absolute;left:16%;right:16%;top:39%;text-align:center;color:#4ba01f;font-size:14px;line-height:1.45;">{{ camCaption }}</div>
+
+        <div style="position:absolute;left:16%;right:16%;top:50.5%;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+            <span style="font-size:16px;color:#3f7a1f;">😄 미소 게이지</span>
+            <span style="font-size:26px;color:#f5a300;text-shadow:1px 1px 0 #fff;">{{ liveScore }}<span style="font-size:14px;">점</span></span>
+          </div>
+          <div style="position:relative;height:18px;margin-top:6px;background:rgba(255,255,255,.65);border:2px solid #cfe6ad;border-radius:999px;overflow:hidden;">
+            <div style="height:100%;width:{{ progressPct }};background:linear-gradient(90deg,#7fdf5b,#ffd23f);transition:width .12s linear;"></div>
+          </div>
+          <div style="position:absolute;top:22px;left:{{ progressPct }};transform:translate(-50%,-2px);font-size:22px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));">⭐</div>
+        </div>
+
+        <div style="position:absolute;left:13%;width:35%;top:66.5%;height:9%;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:20px;color:#e39a00;white-space:nowrap;">⏱ {{ holdSeconds }}초</div>
+          <div style="font-size:12px;color:#7a8a63;">미소 유지</div>
+        </div>
+        <div style="position:absolute;left:52%;width:35%;top:66.5%;height:9%;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:20px;color:#3f86c0;white-space:nowrap;">📅 1일 3회</div>
+          <div style="font-size:12px;color:#6a86a0;">추천 루틴</div>
+        </div>
+
+        <div style="position:absolute;left:17%;right:17%;top:78.6%;text-align:center;color:#4a7ba0;font-size:12px;line-height:1.45;">📷 카메라로 표정을 인식해 미소를 측정해요.<br>얼굴 이미지는 저장되지 않아요 🔒</div>
+
+        <sc-if value="{{ showStartBtn }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ startDetect }}" style="position:absolute;left:14%;right:14%;bottom:4%;background:transparent;border:none;cursor:pointer;padding:0;" aria-label="표정 훈련 시작">
+            <img src="assets/btn_start.png" alt="표정 훈련 시작" style="width:100%;display:block;" style-active="transform:translateY(3px);">
+          </button>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- SCREEN 4 : RESULT -->
+      <sc-if value="{{ isResult }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;">
+        <img src="assets/result.png" alt="인상 UP! 결과" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+        <button onClick="{{ again }}" style="position:absolute;left:14%;right:14%;bottom:26.5%;height:6.5%;background:transparent;border:none;cursor:pointer;padding:0;" aria-label="한 번 더 도전"></button>
+        <button onClick="{{ home }}" style="position:absolute;left:14%;right:14%;bottom:18%;height:6%;background:transparent;border:none;cursor:pointer;padding:0;" aria-label="친구와 챌린지 공유"></button>
+        <button onClick="{{ home }}" style="position:absolute;left:20%;right:20%;bottom:6.5%;padding:12px;background:#fffdf2;border:3px solid #7fc23f;border-radius:14px;box-shadow:0 4px 0 #cfe6ad;color:#3f7a1f;font-family:'Jua';font-size:18px;cursor:pointer;" style-active="transform:translateY(3px);box-shadow:0 1px 0 #cfe6ad;">🏠 처음으로 돌아가기</button>
+      </div>
+      </sc-if>
+
+      <div style="position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:130px;height:5px;background:rgba(0,0,0,.28);border-radius:999px;z-index:60;"></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:448,&quot;height&quot;:908},&quot;expression&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;활짝 웃기&quot;,&quot;눈웃음&quot;,&quot;광대 승천&quot;],&quot;default&quot;:&quot;활짝 웃기&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;게임&quot;},&quot;holdSeconds&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:3,&quot;max&quot;:10,&quot;step&quot;:1,&quot;default&quot;:7,&quot;unit&quot;:&quot;초&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;게임&quot;},&quot;useCamera&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;게임&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'start', phase: 'idle', count: 3, progress: 0, liveScore: 0, score: 0, rating: 5, camError: false };
+
+  EXPR = {
+    '활짝 웃기': { instr: '입꼬리를 힘껏 올려 활짝 웃어요!', focus: '입꼬리 · 눈매' },
+    '눈웃음': { instr: '눈으로 웃어봐요! 눈매를 부드럽게~', focus: '눈매 · 애교살' },
+    '광대 승천': { instr: '광대를 끌어올려 볼을 빵긋!', focus: '광대 · 인중' },
+  };
+
+  get expr() {
+    const name = this.props.expression || '활짝 웃기';
+    return { name, ...(this.EXPR[name] || this.EXPR['활짝 웃기']) };
+  }
+  get holdSecs() { return this.props.holdSeconds || 7; }
+
+  goMission = () => this.setState({ screen: 'mission' });
+  goHome = () => { this.cleanup(); this.setState({ screen: 'start', phase: 'idle', progress: 0, liveScore: 0 }); };
+
+  goPlay = () => {
+    this.setState({ screen: 'play', phase: 'ready', progress: 0, liveScore: 0, camError: false });
+    if (this.props.useCamera !== false) this.startCamera(); else this.setState({ camError: true });
+  };
+
+  startDetect = () => {
+    this.setState({ phase: 'countdown', count: 3, progress: 0, liveScore: 0 });
+    let n = 3;
+    clearInterval(this.countId);
+    this.countId = setInterval(() => {
+      n -= 1;
+      if (n <= 0) { clearInterval(this.countId); this.beginHold(); }
+      else this.setState({ count: n });
+    }, 1000);
+  };
+
+  beginHold = () => {
+    this.setState({ phase: 'hold' });
+    const step = 100 / (this.holdSecs * 10);
+    this.holdId = setInterval(() => {
+      this.setState(s => {
+        const p = Math.min(100, s.progress + step);
+        const live = Math.round(p * 0.94);
+        if (p >= 100) { clearInterval(this.holdId); setTimeout(this.finish, 250); }
+        return { progress: p, liveScore: live };
+      });
+    }, 100);
+  };
+
+  finish = () => {
+    this.stopCamera();
+    const score = 89 + Math.floor(Math.random() * 9);
+    this.setState({ screen: 'result', phase: 'done', score, rating: score >= 90 ? 5 : 4 });
+  };
+
+  again = () => this.goPlay();
+
+  startCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { this.setState({ camError: true }); return; }
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
+      .then(stream => { this.stream = stream; if (this.videoEl) this.videoEl.srcObject = stream; })
+      .catch(() => this.setState({ camError: true }));
+  }
+  stopCamera() { if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; } }
+  cleanup() { clearInterval(this.countId); clearInterval(this.holdId); this.stopCamera(); }
+  setVideo = el => { this.videoEl = el; if (el && this.stream) el.srcObject = this.stream; };
+
+  setScaler = el => { this.scalerEl = el; if (el) this.fitScale(); };
+  fitScale = () => {
+    if (!this.scalerEl) return;
+    const s = Math.min(1, (window.innerHeight - 24) / 884, (window.innerWidth - 24) / 424);
+    this.scalerEl.style.transform = 'scale(' + s + ')';
+  };
+  componentDidMount() { this._fit = () => this.fitScale(); window.addEventListener('resize', this._fit); this.fitScale(); }
+  componentWillUnmount() { this.cleanup(); if (this._fit) window.removeEventListener('resize', this._fit); }
+
+  renderVals() {
+    const s = this.state, e = this.expr;
+    const rating = s.rating || 0;
+    const comments = [
+      '7초의 기적! 세로토닌이 분비됐어요 😊 오늘도 호감상 완성!',
+      '입꼬리 각도가 살아났어요! 첫인상 점수 쑥쑥 UP 📈',
+      '따뜻한 미소가 완성됐어요. 내일도 이 표정 기억해요!',
+    ];
+    return {
+      screen: s.screen,
+      isStart: s.screen === 'start',
+      isMission: s.screen === 'mission',
+      isPlay: s.screen === 'play',
+      isResult: s.screen === 'result',
+      countingDown: s.phase === 'countdown',
+      holding: s.phase === 'hold',
+      showStartBtn: s.phase === 'ready',
+      count: s.count,
+      progressPct: (s.progress || 0) + '%',
+      liveScore: s.liveScore || 0,
+      camError: s.camError,
+      camActive: !s.camError,
+      camLabel: s.camError ? '데모 모드' : '표정 인식 중',
+      camCaption: s.camError ? '카메라가 준비되었어요! 입꼬리를 올려 활짝 웃어보세요!' : '카메라가 켜졌어요! 입꼬리를 올려 활짝 웃어보세요!',
+      exprName: e.name, instr: e.instr, focus: e.focus,
+      holdSeconds: this.holdSecs,
+      score: s.score || 0,
+      comment: comments[(s.score || 89) % comments.length],
+      streak: 3,
+      filledStars: Array.from({ length: rating }),
+      emptyStars: Array.from({ length: Math.max(0, 5 - rating) }),
+      start: this.goMission, home: this.goHome, goPlay: this.goPlay, startDetect: this.startDetect, again: this.again, setVideo: this.setVideo, setScaler: this.setScaler,
+    };
+  }
+}
+</script>
+</body>
+</html>
